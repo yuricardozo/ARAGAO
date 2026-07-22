@@ -51,6 +51,7 @@ h2.tit{font-family:var(--disp);font-weight:600;font-size:clamp(30px,4.2vw,50px);
 
 /* ---------- carregamento ---------- */
 #load{position:fixed;inset:0;z-index:200;background:var(--verde);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px}
+#load .load-foto{width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.28);opacity:0;transform:scale(.9);animation:sobe .9s .05s cubic-bezier(.22,.61,.36,1) forwards}
 #load .nome{font-family:var(--disp);font-weight:600;font-size:clamp(34px,7vw,62px);letter-spacing:-.02em;opacity:0;transform:translateY(14px);animation:sobe .9s .2s cubic-bezier(.22,.61,.36,1) forwards}
 #load .creci{font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.6);opacity:0;animation:sobe .9s .45s cubic-bezier(.22,.61,.36,1) forwards}
 #load .trilho{width:min(280px,60vw);height:2px;background:rgba(255,255,255,.22);border-radius:2px;overflow:hidden}
@@ -86,7 +87,8 @@ header.solid .burger i,header.solid .burger i::before,header.solid .burger i::af
 /* ---------- abertura ---------- */
 .hero{position:relative;min-height:min(780px,94vh);display:flex;align-items:center;padding:120px 0 190px;overflow:hidden}
 .hero .fundo{position:absolute;inset:0;z-index:-2}
-.hero .fundo svg,.hero .fundo img{width:100%;height:100%;object-fit:cover;transform:scale(1.06);animation:zoom 14s ease-out forwards}
+.hero .fundo{position:absolute;inset:0;z-index:-2}
+.hero .fundo svg,.hero .fundo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.06);animation:zoom 14s ease-out forwards}
 @keyframes zoom{to{transform:scale(1)}}
 .hero .veu{position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(14,75,58,.82) 0%,rgba(14,75,58,.58) 45%,rgba(16,20,19,.72) 100%)}
 .hero-txt{color:#fff;max-width:780px}
@@ -140,6 +142,10 @@ header.solid .burger i,header.solid .burger i::before,header.solid .burger i::af
 .card:hover{box-shadow:var(--sombra2)}
 .card .foto{position:relative;aspect-ratio:4/3;overflow:hidden;background:var(--areia)}
 .card .foto img,.card .foto svg{width:100%;height:100%;object-fit:cover;transition:transform 1s cubic-bezier(.22,.61,.36,1)}
+.foto .sobre,.capa .sobre{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.card .foto,.ficha .capa{position:relative}
+.ilustrativa{position:absolute;right:14px;top:14px;background:rgba(16,20,19,.7);color:#fff;font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;border-radius:999px;z-index:2}
+.ficha .capa .ilustrativa{right:70px}
 .card:hover .foto img,.card:hover .foto svg{transform:scale(1.06)}
 .tags{position:absolute;top:14px;left:14px;display:flex;gap:7px;flex-wrap:wrap}
 .tag{background:rgba(255,255,255,.94);color:var(--verde);font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:6px 11px;border-radius:999px}
@@ -212,6 +218,10 @@ header.solid .burger i,header.solid .burger i::before,header.solid .burger i::af
 .depo .quem{font-size:13.5px;color:var(--cinza);font-weight:500}
 
 /* ---------- formulário ---------- */
+.assina{display:flex;align-items:center;gap:14px;margin-top:28px;background:#fff;border-radius:999px;padding:10px 22px 10px 10px;width:fit-content;box-shadow:var(--sombra)}
+.assina img{width:54px;height:54px;border-radius:50%;object-fit:cover}
+.assina b{display:block;font-family:var(--disp);font-size:17px;font-weight:600}
+.assina span{font-size:13px;color:var(--cinza)}
 .form-in{display:grid;grid-template-columns:.95fr 1.05fr;gap:clamp(30px,5vw,70px);align-items:start}
 .cartao{background:#fff;border-radius:24px;box-shadow:var(--sombra);padding:clamp(26px,3.4vw,40px)}
 .passos{display:flex;gap:6px;margin-bottom:26px}
@@ -290,6 +300,7 @@ footer a.lk:hover{color:var(--ambar)}
 <body class="carregando">
 
 <div id="load">
+  <img class="load-foto" id="load-foto" alt="">
   <span class="nome" id="load-nome">Aragão</span>
   <span class="creci" id="load-creci"></span>
   <div class="trilho"><i id="load-bar"></i></div>
@@ -467,9 +478,7 @@ footer a.lk:hover{color:var(--ambar)}
       <span class="eyebrow rev" id="c-etiqueta"></span>
       <h2 class="tit rev" id="c-titulo"></h2>
       <p class="sub rev">Ao enviar, a conversa abre no meu WhatsApp com o resumo já preenchido. Quem responde sou eu.</p>
-      <div class="selos rev" style="margin-top:26px">
-        <span class="selo-h" style="background:#fff;border-color:var(--linha);color:var(--tinta)">Retorno em até 2h úteis</span>
-      </div>
+      <div class="assina rev" id="assina"></div>
     </div>
     <div class="cartao rev">
       <div class="passos"><i class="on"></i><i></i><i></i></div>
@@ -537,6 +546,7 @@ footer a.lk:hover{color:var(--ambar)}
 <script src="config.js"></script>
 <script src="conteudo.js"></script>
 <script src="imagens.js"></script>
+<script src="fotos.js"></script>
 <script>
 (function(){
   const C = CONTEUDO, $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
@@ -560,7 +570,8 @@ footer a.lk:hover{color:var(--ambar)}
   $('#r-frase').textContent = C.rodape.frase;
 
   /* ---------- abertura ---------- */
-  $('#hero-fundo').innerHTML = CENA.casa(5);
+  $('#hero-fundo').innerHTML =
+    `${CENA.casa(5)}<img class="sobre" src="${FOTOS.abertura}" alt="" onerror="this.remove()">`;
   $('#h-etiqueta').textContent = C.hero.etiqueta;
   $('#h-titulo').innerHTML =
     `<span><b style="transition-delay:.4s">${C.hero.titulo_1}</b></span>` +
@@ -612,9 +623,16 @@ footer a.lk:hover{color:var(--ambar)}
   };
   const areaDe = im => im.area > 0 ? im.area : (im.terreno || 0);
   const semente = im => (im.codigo || '').split('').reduce((a,c) => a + c.charCodeAt(0), 0);
-  const capa = im => (im.fotos && im.fotos.length)
-    ? `<img src="${im.fotos[0]}" alt="${im.titulo}" loading="lazy">`
-    : CENA.porTipo(im.tipo, semente(im));
+  function capa(im){
+    if(im.fotos && im.fotos.length)
+      return `<img src="${im.fotos[0]}" alt="${im.titulo}" loading="lazy">`;
+    const foto = FOTOS.porTipo(im.tipo, semente(im));
+    const desenho = CENA.porTipo(im.tipo, semente(im));
+    return foto
+      ? `${desenho}<img class="sobre" src="${foto}" alt="Imagem ilustrativa de ${im.tipo}" loading="lazy" onerror="this.remove()">
+         <span class="ilustrativa">Foto ilustrativa</span>`
+      : desenho;
+  }
 
   function montarSelects(){
     const tipos = ['todos', ...new Set(LISTA.map(i => i.tipo))];
@@ -761,7 +779,7 @@ footer a.lk:hover{color:var(--ambar)}
       [im.vagas || '—', 'Vagas']
     ];
     $('#ficha-corpo').innerHTML = `
-      <div class="capa" id="ficha-capa">${fotos.length ? `<img src="${fotos[0]}" alt="${im.titulo}">` : CENA.porTipo(im.tipo, semente(im))}</div>
+      <div class="capa" id="ficha-capa">${fotos.length ? `<img src="${fotos[0]}" alt="${im.titulo}">` : capa(im)}</div>
       ${fotos.length > 1 ? `<div class="miniaturas">${fotos.slice(0,8).map(f => `<img src="${f}" alt="" loading="lazy" data-troca="${f}">`).join('')}</div>` : ''}
       <div class="corpo">
         <span class="eyebrow">${im.codigo} · ${im.finalidade === 'venda' ? 'À venda' : 'Para alugar'}</span>
@@ -795,6 +813,8 @@ footer a.lk:hover{color:var(--ambar)}
   });
 
   /* ---------- formulário ---------- */
+  $('#assina').innerHTML = (C.perfil.avatar ? `<img src="${C.perfil.avatar}" alt="${C.marca.nome}">` : '') +
+    `<span><b>Quem responde é ${C.marca.nome}</b><span>Retorno em até 2h úteis · ${C.marca.creci}</span></span>`;
   $('#c-etiqueta').textContent = C.formulario.etiqueta;
   $('#c-titulo').textContent = C.formulario.titulo;
   const resp = { objetivo:'', tipo:'', prazo:'' };
@@ -891,6 +911,7 @@ footer a.lk:hover{color:var(--ambar)}
 
   /* ---------- tela de carregamento ---------- */
   const load = $('#load');
+  if(C.perfil.avatar){ $('#load-foto').src = C.perfil.avatar; } else { $('#load-foto').remove(); }
   $('#load-nome').textContent = C.marca.nome;
   $('#load-creci').textContent = `${C.marca.cargo} · ${C.marca.creci}`;
   if(semMov){

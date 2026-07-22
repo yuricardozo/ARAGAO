@@ -69,7 +69,8 @@ const CONTEUDO = {
       "Acompanho de perto a variação de preço por bairro, o ritmo dos lançamentos e o comportamento do aluguel na cidade. É esse acervo de informação que evita que você pague caro na compra ou anuncie errado na venda.",
       "Cada negociação é conduzida por mim do primeiro contato à assinatura: visita, documentação, proposta, financiamento e escritura."
     ],
-    foto: "",                        // ex.: "fotos/aragao.jpg" — deixe vazio para usar o marcador
+    foto: "fotos/aragao.jpg",        // foto real do corretor
+    avatar: "fotos/aragao-avatar.jpg",
     assinatura: "Aragão · CRECI/MT 0000"
   },
 
