@@ -289,7 +289,11 @@ footer a.lk:hover{color:var(--ambar)}
   .perfil,.aval,.form-in{grid-template-columns:1fr}
   .depos{grid-template-columns:1fr}
   .nums{grid-template-columns:repeat(2,1fr)}
+  /* empilhado (celular e tablet): Delegado sobe e Área de atuação fecha a lista.
+     No computador a ordem original é mantida, com 1 e 3 à esquerda, 2 e 4 à direita. */
   .credenciais{grid-template-columns:1fr}
+  .cred:nth-child(3){order:4}
+  .cred:nth-child(4){order:3}
 }
 @media(max-width:760px){
   nav.desk,.bar>.btn{display:none}
