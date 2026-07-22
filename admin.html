@@ -320,7 +320,10 @@ main{max-width:1420px;margin:0 auto;padding:28px 26px 90px}
   const aviso = (sel, txt, ok) => { const e = $(sel); e.textContent = txt; e.classList.toggle('ok', !!ok); e.classList.toggle('on', !!txt); };
   $('#lg-creci').textContent = CONTEUDO.marca.creci;
   $('#hd-nome').textContent = CONTEUDO.marca.nome;
-  const retrato = CONTEUDO.perfil.avatar || CONTEUDO.perfil.foto;
+  const CACHE_FOTO = 'aragao:foto-corretor';
+  const leCache = () => { try{ return localStorage.getItem(CACHE_FOTO); }catch(e){ return null; } };
+  const gravaCache = v => { try{ v ? localStorage.setItem(CACHE_FOTO, v) : localStorage.removeItem(CACHE_FOTO); }catch(e){} };
+  const retrato = leCache() || CONTEUDO.perfil.avatar || CONTEUDO.perfil.foto;
   if(retrato){ $('#lg-foto').src = retrato; $('#hd-foto').src = retrato; }
   else { $('#lg-foto').remove(); $('#hd-foto').remove(); }
 
@@ -553,6 +556,10 @@ main{max-width:1420px;margin:0 auto;padding:28px 26px 90px}
       return;
     }
     AJUSTES = Object.fromEntries((data || []).map(r => [r.chave, r.valor]));
+    gravaCache(AJUSTES.foto_corretor || null);
+    const atual = AJUSTES.foto_corretor || CONTEUDO.perfil.avatar || CONTEUDO.perfil.foto;
+    if($('#lg-foto')) $('#lg-foto').src = atual;
+    if($('#hd-foto')) $('#hd-foto').src = atual;
     pintarPrevias();
   }
 
@@ -583,6 +590,10 @@ main{max-width:1420px;margin:0 auto;padding:28px 26px 90px}
     $('#carga-img').classList.remove('on');
     if(salvo.error) return toast('Não consegui salvar: ' + salvo.error.message);
     AJUSTES[chaveAtual] = data.publicUrl;
+    if(chaveAtual === 'foto_corretor'){
+      gravaCache(data.publicUrl);
+      if($('#hd-foto')) $('#hd-foto').src = data.publicUrl;
+    }
     pintarPrevias();
     toast('Imagem trocada. Já está no ar.');
   };
@@ -593,6 +604,11 @@ main{max-width:1420px;margin:0 auto;padding:28px 26px 90px}
     const { error } = await db.from('configuracoes').delete().eq('chave', chave);
     if(error) return toast('Não consegui restaurar: ' + error.message);
     delete AJUSTES[chave];
+    if(chave === 'foto_corretor'){
+      gravaCache(null);
+      const padrao = CONTEUDO.perfil.avatar || CONTEUDO.perfil.foto;
+      if($('#hd-foto')) $('#hd-foto').src = padrao;
+    }
     pintarPrevias();
     toast('Imagem original restaurada.');
   });

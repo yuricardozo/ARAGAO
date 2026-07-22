@@ -569,6 +569,14 @@ footer a.lk:hover{color:var(--ambar)}
   const C = CONTEUDO, $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
   const zap = m => `https://wa.me/${C.marca.whatsapp}?text=${encodeURIComponent(m)}`;
   const anos = new Date().getFullYear() - C.marca.ano_inicio;
+  /* a foto enviada pelo painel fica guardada no navegador, para já aparecer
+     na tela de carregamento — antes mesmo do banco responder */
+  const CACHE_FOTO = 'aragao:foto-corretor';
+  const leCache = () => { try{ return localStorage.getItem(CACHE_FOTO); }catch(e){ return null; } };
+  const gravaCache = v => { try{ v ? localStorage.setItem(CACHE_FOTO, v) : localStorage.removeItem(CACHE_FOTO); }catch(e){} };
+  let fotoCorretor = leCache() || C.perfil.foto;
+  let avatarCorretor = leCache() || C.perfil.avatar;
+
   const primeiro = C.marca.primeiro_nome || C.marca.nome.split(' ')[0];
   const iniciais = C.marca.nome.trim().split(/\s+/).map(p => p[0]).slice(0,2).join('');
   const msgBase = `Olá, ${primeiro}! Vi seu site e gostaria de falar sobre imóveis em ${C.marca.cidade}.`;
@@ -621,7 +629,17 @@ footer a.lk:hover{color:var(--ambar)}
           alt="${C.marca.nome}, ${C.marca.cargo} em ${C.marca.cidade}" onerror="this.remove()">` : '') +
       `<div class="cracha"><b>${C.marca.nome}</b><span>${C.marca.creci}</span></div>`;
   }
-  pintarRetrato(C.perfil.foto);
+  function aplicarFoto(src, avatar){
+    fotoCorretor = src; avatarCorretor = avatar || src;
+    pintarRetrato(src);
+    const retrato = $('.retrato');
+    if(retrato && retrato.classList.contains('anima')) retrato.classList.add('in');
+    const naAssinatura = $('#assina img');
+    if(naAssinatura) naAssinatura.src = avatarCorretor;
+    const noCarregamento = $('#load-foto');
+    if(noCarregamento) noCarregamento.src = avatarCorretor;
+  }
+  pintarRetrato(fotoCorretor);
 
   function pintarAbertura(src){
     $('#hero-fundo').innerHTML =
@@ -847,7 +865,7 @@ footer a.lk:hover{color:var(--ambar)}
   });
 
   /* ---------- formulário ---------- */
-  $('#assina').innerHTML = (C.perfil.avatar ? `<img src="${C.perfil.avatar}" alt="${C.marca.nome}">` : '') +
+  $('#assina').innerHTML = (avatarCorretor ? `<img src="${avatarCorretor}" alt="${C.marca.nome}">` : '') +
     `<span><b>Quem responde é ${primeiro}</b><span>Retorno em até 2h úteis · ${C.marca.creci}</span></span>`;
   $('#c-etiqueta').textContent = C.formulario.etiqueta;
   $('#c-titulo').textContent = C.formulario.titulo;
@@ -896,10 +914,12 @@ footer a.lk:hover{color:var(--ambar)}
     if(error || !data) return;
     const ajuste = Object.fromEntries(data.map(r => [r.chave, r.valor]));
     if(ajuste.foto_corretor){
-      pintarRetrato(ajuste.foto_corretor);
-      const a = $('#assina img'); if(a) a.src = ajuste.foto_corretor;
-      const retrato = $('.retrato');
-      if(retrato && retrato.classList.contains('anima')) retrato.classList.add('in');
+      if(ajuste.foto_corretor !== fotoCorretor) aplicarFoto(ajuste.foto_corretor);
+      gravaCache(ajuste.foto_corretor);
+    } else if(leCache()){
+      /* o corretor voltou ao padrão pelo painel */
+      gravaCache(null);
+      aplicarFoto(C.perfil.foto, C.perfil.avatar);
     }
     if(ajuste.imagem_abertura) pintarAbertura(ajuste.imagem_abertura);
   }
@@ -965,7 +985,7 @@ footer a.lk:hover{color:var(--ambar)}
 
   /* ---------- tela de carregamento ---------- */
   const load = $('#load');
-  if(C.perfil.avatar){ $('#load-foto').src = C.perfil.avatar; } else { $('#load-foto').remove(); }
+  if(avatarCorretor){ $('#load-foto').src = avatarCorretor; } else { $('#load-foto').remove(); }
   $('#load-nome').textContent = C.marca.nome;
   $('#load-creci').textContent = `${C.marca.cargo} · ${C.marca.creci}`;
   if(semMov){
