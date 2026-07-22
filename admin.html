@@ -114,6 +114,17 @@ main{max-width:1420px;margin:0 auto;padding:28px 26px 90px}
 .spin{width:15px;height:15px;border:2px solid var(--linha);border-top-color:var(--verde);border-radius:50%;animation:gira .7s linear infinite}
 @keyframes gira{to{transform:rotate(360deg)}}
 
+/* ---- imagens do site ---- */
+.slots{display:grid;gap:18px}
+.slot{display:grid;grid-template-columns:230px 1fr;gap:24px;background:#fff;border:1px solid var(--linha);border-radius:var(--r);padding:22px}
+.previa{aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:var(--creme);display:grid;place-items:center}
+.previa.larga{aspect-ratio:16/10}
+.previa img,.previa svg{width:100%;height:100%;object-fit:cover}
+.slot-txt h3{font-family:var(--disp);font-size:22px;font-weight:600;letter-spacing:-.01em;margin-bottom:8px}
+.slot-txt p{color:var(--cinza);font-size:14.5px;max-width:56ch}
+.acoes-slot{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+@media(max-width:760px){.slot{grid-template-columns:1fr}}
+
 /* ---- contatos ---- */
 .lead{background:#fff;border-radius:var(--r);padding:22px;margin-bottom:12px;border:1px solid var(--linha)}
 .lead.novo{border-left:4px solid var(--ambar)}
@@ -170,6 +181,7 @@ main{max-width:1420px;margin:0 auto;padding:28px 26px 90px}
     <div class="abas">
       <button class="aba on" data-painel="imoveis">Imóveis</button>
       <button class="aba" data-painel="contatos">Contatos <b id="qtd-novos" style="display:none">0</b></button>
+      <button class="aba" data-painel="imagens">Imagens do site</button>
     </div>
   </header>
 
@@ -184,6 +196,42 @@ main{max-width:1420px;margin:0 auto;padding:28px 26px 90px}
         </div>
       </div>
       <div id="tabela"></div>
+    </div>
+
+    <!-- IMAGENS DO SITE -->
+    <div class="painel" id="pn-imagens">
+      <div class="topo"><h2>Imagens do site</h2></div>
+      <p style="color:var(--cinza);margin:-8px 0 24px;max-width:66ch">
+        Estas duas imagens aparecem no site para todo mundo. Ao enviar uma nova, ela entra no ar na hora —
+        não precisa mexer em mais nada.</p>
+      <div class="slots">
+        <div class="slot">
+          <div class="previa" id="prev-corretor"></div>
+          <div class="slot-txt">
+            <h3>Foto do corretor</h3>
+            <p>Aparece na seção "Quem atende você" e na assinatura do formulário de contato.
+               Use uma foto em pé, de boa luz — o site recorta em formato retrato.</p>
+            <div class="acoes-slot">
+              <button class="btn" data-enviar="foto_corretor">Enviar nova foto</button>
+              <button class="btn ghost" data-restaurar="foto_corretor">Voltar ao padrão</button>
+            </div>
+          </div>
+        </div>
+        <div class="slot">
+          <div class="previa larga" id="prev-abertura"></div>
+          <div class="slot-txt">
+            <h3>Imagem da abertura</h3>
+            <p>É a imagem grande do topo do site, atrás do título. Prefira uma foto deitada,
+               de um imóvel ou da cidade, sem texto e sem gente em primeiro plano.</p>
+            <div class="acoes-slot">
+              <button class="btn" data-enviar="imagem_abertura">Enviar nova imagem</button>
+              <button class="btn ghost" data-restaurar="imagem_abertura">Voltar ao padrão</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <input type="file" id="arq-imagem" accept="image/*" hidden>
+      <div class="carga" id="carga-img"><span class="spin"></span><span>Enviando imagem…</span></div>
     </div>
 
     <!-- CONTATOS -->
@@ -264,6 +312,7 @@ main{max-width:1420px;margin:0 auto;padding:28px 26px 90px}
 <script src="foto-corretor.js"></script>
 <script src="conteudo.js"></script>
 <script src="imagens.js"></script>
+<script src="fotos.js"></script>
 <script>
 (function(){
   const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
@@ -304,7 +353,7 @@ main{max-width:1420px;margin:0 auto;padding:28px 26px 90px}
     $('#login').style.display = 'none';
     $('#app').style.display = 'block';
     $('#quem').textContent = email;
-    carregarImoveis(); carregarLeads();
+    carregarImoveis(); carregarLeads(); carregarAjustes();
   }
   $('#sair').onclick = async () => { await db.auth.signOut(); location.reload(); };
 
@@ -487,6 +536,66 @@ main{max-width:1420px;margin:0 auto;padding:28px 26px 90px}
     if(error) return aviso('#ed-aviso', 'Não consegui excluir: ' + error.message);
     fecharEditor(); toast('Imóvel excluído.'); carregarImoveis();
   };
+
+  /* ---------------- IMAGENS DO SITE ---------------- */
+  let AJUSTES = {};
+  const PADRAO = {
+    foto_corretor: (typeof FOTO_CORRETOR !== 'undefined' ? FOTO_CORRETOR.retrato : ''),
+    imagem_abertura: (typeof FOTOS !== 'undefined' ? FOTOS.abertura : '')
+  };
+
+  async function carregarAjustes(){
+    const { data, error } = await db.from('configuracoes').select('chave,valor');
+    if(error){
+      $('#pn-imagens').insertAdjacentHTML('afterbegin',
+        `<div class="aviso on">A tabela de imagens ainda não existe no banco. Rode o arquivo banco.sql
+         de novo no Supabase (SQL Editor) para liberar esta aba.</div>`);
+      return;
+    }
+    AJUSTES = Object.fromEntries((data || []).map(r => [r.chave, r.valor]));
+    pintarPrevias();
+  }
+
+  function pintarPrevias(){
+    const c = AJUSTES.foto_corretor || PADRAO.foto_corretor;
+    const a = AJUSTES.imagem_abertura || PADRAO.imagem_abertura;
+    $('#prev-corretor').innerHTML = c ? `<img src="${c}" alt="">` : CENA.retrato();
+    $('#prev-abertura').innerHTML = a ? `<img src="${a}" alt="">` : CENA.casa(5);
+  }
+
+  let chaveAtual = null;
+  $$('[data-enviar]').forEach(b => b.onclick = () => {
+    chaveAtual = b.dataset.enviar;
+    $('#arq-imagem').click();
+  });
+  $('#arq-imagem').onchange = async () => {
+    const arq = $('#arq-imagem').files[0];
+    $('#arq-imagem').value = '';
+    if(!arq || !chaveAtual) return;
+    if(arq.size > 6 * 1024 * 1024) return toast('Imagem muito pesada. Use uma de até 6 MB.');
+    $('#carga-img').classList.add('on');
+    const nome = `site/${chaveAtual}-${Date.now()}-${arq.name.replace(/[^\w.\-]/g,'_')}`;
+    const { error } = await db.storage.from(SUPA.bucket).upload(nome, arq, { cacheControl:'31536000' });
+    if(error){ $('#carga-img').classList.remove('on'); return toast('Erro no envio: ' + error.message); }
+    const { data } = db.storage.from(SUPA.bucket).getPublicUrl(nome);
+    const salvo = await db.from('configuracoes')
+      .upsert({ chave: chaveAtual, valor: data.publicUrl, atualizado_em: new Date().toISOString() });
+    $('#carga-img').classList.remove('on');
+    if(salvo.error) return toast('Não consegui salvar: ' + salvo.error.message);
+    AJUSTES[chaveAtual] = data.publicUrl;
+    pintarPrevias();
+    toast('Imagem trocada. Já está no ar.');
+  };
+
+  $$('[data-restaurar]').forEach(b => b.onclick = async () => {
+    const chave = b.dataset.restaurar;
+    if(!confirm('Voltar para a imagem original do site?')) return;
+    const { error } = await db.from('configuracoes').delete().eq('chave', chave);
+    if(error) return toast('Não consegui restaurar: ' + error.message);
+    delete AJUSTES[chave];
+    pintarPrevias();
+    toast('Imagem original restaurada.');
+  });
 
   /* ---------------- CONTATOS ---------------- */
   async function carregarLeads(){

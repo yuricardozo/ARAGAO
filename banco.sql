@@ -79,6 +79,25 @@ drop policy if exists "contatos admin apaga" on public.contatos;
 create policy "contatos admin apaga" on public.contatos
   for delete to authenticated using (true);
 
+-- ---------- IMAGENS DO SITE ----------
+-- Guarda o endereco das imagens que o corretor troca pelo painel:
+-- a foto dele e a imagem da primeira secao do site.
+create table if not exists public.configuracoes (
+  chave         text primary key,
+  valor         text,
+  atualizado_em timestamptz default now()
+);
+
+alter table public.configuracoes enable row level security;
+
+drop policy if exists "config leitura publica" on public.configuracoes;
+create policy "config leitura publica" on public.configuracoes
+  for select using (true);
+
+drop policy if exists "config admin" on public.configuracoes;
+create policy "config admin" on public.configuracoes
+  for all to authenticated using (true) with check (true);
+
 -- ---------- PASTA DE FOTOS (STORAGE) ----------
 insert into storage.buckets (id, name, public)
 values ('imoveis', 'imoveis', true)

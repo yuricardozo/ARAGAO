@@ -197,7 +197,7 @@ header.solid .burger i,header.solid .burger i::before,header.solid .burger i::af
 .retrato .cracha span{font-size:12px;color:var(--cinza);letter-spacing:.08em;text-transform:uppercase;font-weight:600}
 .perfil p{color:var(--cinza);margin-top:16px}
 .perfil p:first-of-type{color:var(--tinta);font-size:18.5px}
-.credenciais{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:1px;background:var(--linha);border:1px solid var(--linha);border-radius:var(--r);overflow:hidden;margin-top:30px}
+.credenciais{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--linha);border:1px solid var(--linha);border-radius:var(--r);overflow:hidden;margin-top:30px}
 .cred{background:#fff;padding:16px 20px;position:relative}
 .cred::before{content:"";position:absolute;left:0;top:16px;bottom:16px;width:3px;background:var(--ambar);border-radius:3px}
 .cred span{display:block;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--cinza);margin-bottom:3px}
@@ -593,8 +593,7 @@ footer a.lk:hover{color:var(--ambar)}
   $('#r-frase').textContent = C.rodape.frase;
 
   /* ---------- abertura ---------- */
-  $('#hero-fundo').innerHTML =
-    `${CENA.casa(5)}<img class="sobre" src="${FOTOS.abertura}" alt="" onerror="this.remove()">`;
+  /* a imagem da abertura é pintada logo abaixo, junto com o retrato */
   $('#h-etiqueta').textContent = C.hero.etiqueta;
   $('#h-titulo').innerHTML =
     `<span><b style="transition-delay:.4s">${C.hero.titulo_1}</b></span>` +
@@ -602,6 +601,8 @@ footer a.lk:hover{color:var(--ambar)}
     `<span><b style="transition-delay:.7s"><em>${C.hero.titulo_3}</em></b></span>`;
   $('#h-texto').textContent = C.hero.texto;
   $('#h-selos').innerHTML = (C.hero.selos || []).map(s => `<span class="selo-h">${s}</span>`).join('');
+
+  pintarAbertura(FOTOS.abertura);
 
   /* ---------- serviços ---------- */
   $('#lista-servicos').innerHTML = (C.servicos || []).map((s,i) =>
@@ -613,11 +614,19 @@ footer a.lk:hover{color:var(--ambar)}
   $('#p-etiqueta').textContent = C.perfil.etiqueta;
   $('#p-titulo').textContent = C.perfil.titulo;
   $('#p-textos').innerHTML = C.perfil.paragrafos.map(p => `<p>${p}</p>`).join('');
-  $('#p-foto').innerHTML =
-    CENA.retrato() +
-    (C.perfil.foto ? `<img class="sobre" src="${C.perfil.foto}"
-        alt="${C.marca.nome}, ${C.marca.cargo} em ${C.marca.cidade}" onerror="this.remove()">` : '') +
-    `<div class="cracha"><b>${C.marca.nome}</b><span>${C.marca.creci}</span></div>`;
+  function pintarRetrato(src){
+    $('#p-foto').innerHTML =
+      CENA.retrato() +
+      (src ? `<img class="sobre" src="${src}"
+          alt="${C.marca.nome}, ${C.marca.cargo} em ${C.marca.cidade}" onerror="this.remove()">` : '') +
+      `<div class="cracha"><b>${C.marca.nome}</b><span>${C.marca.creci}</span></div>`;
+  }
+  pintarRetrato(C.perfil.foto);
+
+  function pintarAbertura(src){
+    $('#hero-fundo').innerHTML =
+      `${CENA.casa(5)}<img class="sobre" src="${src}" alt="" onerror="this.remove()">`;
+  }
   $('#credenciais').innerHTML = (C.perfil.credenciais || []).map(c =>
     `<div class="cred"><span>${c.rotulo}</span><b>${c.valor}</b></div>`).join('');
   $('#numeros').innerHTML = C.numeros.map(n =>
@@ -880,6 +889,21 @@ footer a.lk:hover{color:var(--ambar)}
     window.open(zap(msg), '_blank');
   };
 
+  /* ---------- imagens trocadas pelo painel ---------- */
+  async function carregarImagensDoPainel(){
+    if(!window.CONFIGURADO || !window.db) return;
+    const { data, error } = await db.from('configuracoes').select('chave,valor');
+    if(error || !data) return;
+    const ajuste = Object.fromEntries(data.map(r => [r.chave, r.valor]));
+    if(ajuste.foto_corretor){
+      pintarRetrato(ajuste.foto_corretor);
+      const a = $('#assina img'); if(a) a.src = ajuste.foto_corretor;
+      const retrato = $('.retrato');
+      if(retrato && retrato.classList.contains('anima')) retrato.classList.add('in');
+    }
+    if(ajuste.imagem_abertura) pintarAbertura(ajuste.imagem_abertura);
+  }
+
   /* ---------- banco ---------- */
   async function carregarDoBanco(){
     if(!window.CONFIGURADO || !window.db) return;
@@ -929,6 +953,7 @@ footer a.lk:hover{color:var(--ambar)}
   montarSelects();
   render();
   carregarDoBanco();
+  carregarImagensDoPainel();
   if(!semMov) $$('.rev, .retrato').forEach(el => el.classList.add('anima'));
   $$('.rev, .retrato').forEach(el => olho.observe(el));
 

@@ -27,7 +27,7 @@ const CONTEUDO = {
     ],
     whatsapp: "5565999640786",                   // (65) 99964-0786
     whatsappVisivel: "(65) 99964-0786",
-    email: "contato@aragaocorretor.com.br",
+    email: "cesaraaragao@gmail.com",
     ano_inicio: 2016                             // <-- ano em que começou no ramo
   },
 
@@ -84,8 +84,9 @@ const CONTEUDO = {
     /* Cargos e registros — aparecem em destaque na seção do corretor */
     credenciais: [
       { rotulo: "Registro profissional", valor: "CRECI F-7828" },
-      { rotulo: "Delegado Municipal",    valor: "Gestão 2025–2027" },
-      { rotulo: "Área de atuação",       valor: "Lucas do Rio Verde-MT e região" }
+      { rotulo: "Conselheiro Fiscal",    valor: "Gestão 2025–2027" },
+      { rotulo: "Área de atuação",       valor: "Lucas do Rio Verde-MT e Região" },
+      { rotulo: "Delegado Municipal",    valor: "Gestão 2025–2027" }
     ]
   },
 
@@ -268,7 +269,7 @@ const CONTEUDO = {
 
   /* ---------- 11. RODAPÉ ---------- */
   rodape: {
-    frase: "Atendimento em Lucas do Rio Verde e cidades vizinhas.",
+    frase: "Atendimento em Lucas do Rio Verde e Região.",
     horario: "Segunda a sexta, 8h às 18h · Sábado, 8h às 12h",
     endereco: "Lucas do Rio Verde — MT"
   }
