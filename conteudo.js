@@ -75,7 +75,7 @@ const CONTEUDO = {
     paragrafos: [
       "Sou corretor e avaliador imobiliário em Lucas do Rio Verde. Meu trabalho começa antes do anúncio: entender por que você está comprando, vendendo ou investindo, e o que esse imóvel precisa fazer pela sua vida nos próximos dez anos.",
       "Acompanho de perto a variação de preço por bairro, o ritmo dos lançamentos e a liquidez de cada região da cidade. É esse acervo de informação que evita que você pague caro na compra ou anuncie errado na venda.",
-      "Cada negociação é conduzida por mim do primeiro contato à assinatura: visita, documentação, proposta, financiamento e escritura."
+      "Cada negociação é conduzida por mim do primeiro contato à assinatura: visita, documentação, proposta, financiamento, escritura e registro."
     ],
     foto: FOTO_CORRETOR.retrato,     // imagem embutida em foto-corretor.js
     avatar: FOTO_CORRETOR.avatar,
