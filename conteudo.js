@@ -12,13 +12,21 @@ const CONTEUDO = {
     primeiro_nome: "Cesar",          // usado nas mensagens de WhatsApp
     sobrenome: "Corretor de Imóveis",
     cargo: "Corretor e Avaliador Imobiliário",
-    creci: "CRECI/MT 0000",                      // <-- coloque o número real
+    creci: "CRECI/MT 1043",
     cidade: "Lucas do Rio Verde",
     estado: "MT",
     atuacao: "Lucas do Rio Verde e região",
-    instagram: "aragaocorretorimoveis",
-    whatsapp: "5565900000000",                   // <-- só números, com 55
-    whatsappVisivel: "(65) 90000-0000",
+    instagram: "cesararagaocorretor",
+    /* Redes sociais — aparecem no rodapé e na seção do corretor.
+       Para tirar uma, apague o bloco { ... } dela. */
+    redes: [
+      { rede: "instagram", rotulo: "@cesararagaocorretor",   url: "https://www.instagram.com/cesararagaocorretor" },
+      { rede: "instagram", rotulo: "@aragaocorretorimoveis", url: "https://www.instagram.com/aragaocorretorimoveis" },
+      { rede: "facebook",  rotulo: "Cesar Aragão",           url: "https://www.facebook.com/share/1CxBP9J67D/" },
+      { rede: "facebook",  rotulo: "Aragão Corretor",        url: "https://www.facebook.com/share/193y4UZAgw/" }
+    ],
+    whatsapp: "5565999640786",                   // (65) 99964-0786
+    whatsappVisivel: "(65) 99964-0786",
     email: "contato@aragaocorretor.com.br",
     ano_inicio: 2016                             // <-- ano em que começou no ramo
   },
@@ -71,7 +79,7 @@ const CONTEUDO = {
     ],
     foto: "fotos/aragao.jpg",        // foto real do corretor
     avatar: "fotos/aragao-avatar.jpg",
-    assinatura: "Cesar Aragão · CRECI/MT 0000"
+    assinatura: "Cesar Aragão · CRECI/MT 1043"
   },
 
   /* ---------- 5. NÚMEROS ---------- */
