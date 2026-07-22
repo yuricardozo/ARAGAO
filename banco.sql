@@ -9,7 +9,7 @@ create table if not exists public.imoveis (
   id          uuid primary key default gen_random_uuid(),
   codigo      text unique not null,
   titulo      text not null,
-  finalidade  text not null default 'venda',   -- 'venda' ou 'locacao'
+  finalidade  text not null default 'venda',   -- o corretor trabalha só com venda
   tipo        text not null default 'Casa',
   bairro      text,
   cidade      text default 'Lucas do Rio Verde',
@@ -112,10 +112,10 @@ values
 ('LRV-003','Terreno comercial em avenida de fluxo','venda','Terreno','Parque das Emas',0,600,0,0,0,0,'R$ 690.000',690000,
  'Esquina plana, 20m de frente, pronta para construir. Zoneamento comercial e infraestrutura de rede instalada.',
  '{"Esquina","Plano","Zoneamento comercial"}', false, 3),
-('LRV-004','Barracão logístico às margens da rodovia','locacao','Barracão','Distrito Industrial',900,2000,0,0,2,8,'R$ 18.000/mês',18000,
+('LRV-004','Barracão logístico às margens da rodovia','venda','Barracão','Distrito Industrial',900,2000,0,0,2,8,'R$ 2.400.000',2400000,
  'Pé-direito de 8 metros, escritório interno climatizado, pátio de manobra para carreta e energia trifásica.',
  '{"Pé-direito 8m","Pátio para carreta","Energia trifásica"}', true, 4),
-('LRV-005','Casa térrea para locação familiar','locacao','Casa','Jardim Primavera',120,300,3,1,2,2,'R$ 3.200/mês',3200,
+('LRV-005','Casa térrea pronta para morar','venda','Casa','Jardim Primavera',120,300,3,1,2,2,'R$ 520.000',520000,
  'Quintal murado, churrasqueira e garagem coberta para dois carros. Rua tranquila, perto de escola e mercado.',
  '{"Quintal murado","Churrasqueira","Garagem coberta"}', false, 5),
 ('LRV-006','Chácara com casa sede a 12 km da cidade','venda','Chácara','Zona rural',180,20000,3,1,2,4,'R$ 980.000',980000,

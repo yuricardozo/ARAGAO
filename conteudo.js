@@ -8,7 +8,8 @@ const CONTEUDO = {
 
   /* ---------- 1. IDENTIDADE ---------- */
   marca: {
-    nome: "Aragão",
+    nome: "Cesar Aragão",
+    primeiro_nome: "Cesar",          // usado nas mensagens de WhatsApp
     sobrenome: "Corretor de Imóveis",
     cargo: "Corretor e Avaliador Imobiliário",
     creci: "CRECI/MT 0000",                      // <-- coloque o número real
@@ -28,7 +29,7 @@ const CONTEUDO = {
     titulo_1: "O imóvel certo",
     titulo_2: "para a sua",
     titulo_3: "próxima fase.",
-    texto: "Casas, apartamentos, terrenos e áreas comerciais com acompanhamento pessoal do primeiro contato à escritura.",
+    texto: "Compra, venda e avaliação de casas, apartamentos, terrenos e áreas comerciais, com acompanhamento pessoal até a escritura.",
     cta: "Falar no WhatsApp",
     cta_secundario: "Ver imóveis disponíveis",
     selos: ["Corretor com CRECI ativo", "Avaliação imobiliária", "Atendimento pessoal"]
@@ -48,10 +49,9 @@ const CONTEUDO = {
 
   /* ---------- 2c. SERVIÇOS ---------- */
   servicos: [
-    { titulo: "Comprar", texto: "Seleção filtrada pelo seu orçamento e pela sua rotina, com visita acompanhada." },
-    { titulo: "Vender", texto: "Preço definido por comparação real de mercado, anúncio profissional e triagem de interessados." },
-    { titulo: "Alugar", texto: "Locação residencial e comercial com contrato, vistoria e garantia resolvidos." },
-    { titulo: "Avaliar", texto: "Parecer técnico de valor para venda, inventário, partilha ou garantia bancária." }
+    { titulo: "Comprar", texto: "Seleção filtrada pelo seu orçamento e pela sua rotina, com visita acompanhada e documentação conferida antes da proposta." },
+    { titulo: "Vender", texto: "Preço definido por comparação real de mercado, anúncio profissional e triagem de interessados até a escritura." },
+    { titulo: "Avaliar", texto: "Parecer técnico de valor para venda, inventário, partilha, garantia bancária ou decisão de investimento." }
   ],
 
   /* ---------- 3. FAIXA CORRIDA (marquee) ---------- */
@@ -66,18 +66,18 @@ const CONTEUDO = {
     titulo: "Não vendo imóvel. Resolvo decisão de patrimônio.",
     paragrafos: [
       "Sou corretor e avaliador imobiliário em Lucas do Rio Verde. Meu trabalho começa antes do anúncio: entender por que você está comprando, vendendo ou investindo, e o que esse imóvel precisa fazer pela sua vida nos próximos dez anos.",
-      "Acompanho de perto a variação de preço por bairro, o ritmo dos lançamentos e o comportamento do aluguel na cidade. É esse acervo de informação que evita que você pague caro na compra ou anuncie errado na venda.",
+      "Acompanho de perto a variação de preço por bairro, o ritmo dos lançamentos e a liquidez de cada região da cidade. É esse acervo de informação que evita que você pague caro na compra ou anuncie errado na venda.",
       "Cada negociação é conduzida por mim do primeiro contato à assinatura: visita, documentação, proposta, financiamento e escritura."
     ],
     foto: "fotos/aragao.jpg",        // foto real do corretor
     avatar: "fotos/aragao-avatar.jpg",
-    assinatura: "Aragão · CRECI/MT 0000"
+    assinatura: "Cesar Aragão · CRECI/MT 0000"
   },
 
   /* ---------- 5. NÚMEROS ---------- */
   numeros: [
     { valor: "10", sufixo: "anos", rotulo: "atuando no mercado imobiliário da região" },
-    { valor: "300", sufixo: "+",   rotulo: "imóveis intermediados entre venda e locação" },
+    { valor: "300", sufixo: "+",   rotulo: "imóveis negociados na região" },
     { valor: "150", sufixo: "+",   rotulo: "avaliações e pareceres de valor emitidos" },
     { valor: "100", sufixo: "%",   rotulo: "das negociações acompanhadas pessoalmente" }
   ],
@@ -99,7 +99,7 @@ const CONTEUDO = {
   },
 
   /* ---------- 7. IMÓVEIS ----------
-     finalidade: "venda" ou "locacao"
+     finalidade: sempre "venda" — o corretor não trabalha com locação
      tipo: Casa, Apartamento, Terreno, Chácara, Sala comercial, Barracão, Área rural
      fotos: [] — ex.: ["fotos/casa1.jpg", "fotos/casa2.jpg"]
      Para tirar um imóvel do ar, basta apagar o bloco { ... } dele.
@@ -165,7 +165,7 @@ const CONTEUDO = {
     {
       codigo: "LRV-004",
       titulo: "Barracão logístico às margens da rodovia",
-      finalidade: "locacao",
+      finalidade: "venda",
       tipo: "Barracão",
       bairro: "Distrito Industrial",
       cidade: "Lucas do Rio Verde",
@@ -175,7 +175,7 @@ const CONTEUDO = {
       suites: 0,
       banheiros: 2,
       vagas: 8,
-      preco: "R$ 18.000/mês",
+      preco: "R$ 2.400.000",
       destaque: true,
       descricao: "Pé-direito de 8 metros, escritório interno climatizado, pátio de manobra para carreta e energia trifásica.",
       itens: ["Pé-direito 8m", "Pátio para carreta", "Energia trifásica", "Escritório interno"],
@@ -183,8 +183,8 @@ const CONTEUDO = {
     },
     {
       codigo: "LRV-005",
-      titulo: "Casa térrea para locação familiar",
-      finalidade: "locacao",
+      titulo: "Casa térrea pronta para morar",
+      finalidade: "venda",
       tipo: "Casa",
       bairro: "Jardim Primavera",
       cidade: "Lucas do Rio Verde",
@@ -194,7 +194,7 @@ const CONTEUDO = {
       suites: 1,
       banheiros: 2,
       vagas: 2,
-      preco: "R$ 3.200/mês",
+      preco: "R$ 520.000",
       destaque: false,
       descricao: "Quintal murado, churrasqueira e garagem coberta para dois carros. Rua tranquila, perto de escola e mercado.",
       itens: ["Quintal murado", "Churrasqueira", "Garagem coberta"],
@@ -239,14 +239,14 @@ const CONTEUDO = {
   depoimentos: [
     { texto: "Anunciei minha casa por sete meses com outra pessoa e nada. Ele reposicionou o preço e vendeu em 40 dias.", autor: "Cliente — venda de residência", bairro: "Bairro Cidade Nova" },
     { texto: "Comprei meu primeiro apartamento sem entender nada de financiamento. Ele resolveu a papelada toda comigo.", autor: "Cliente — primeira compra", bairro: "Centro" },
-    { texto: "Precisei de um barracão com urgência para a operação. Em uma semana estávamos com o contrato assinado.", autor: "Cliente — locação comercial", bairro: "Distrito Industrial" }
+    { texto: "Precisei vender rápido para fechar outra compra. Ele achou comprador e segurou as duas pontas até a escritura.", autor: "Cliente — venda casada", bairro: "Parque das Emas" }
   ],
 
   /* ---------- 10. FORMULÁRIO (as respostas vão para o WhatsApp) ---------- */
   formulario: {
     etiqueta: "Comece por aqui",
     titulo: "Três perguntas e eu já sei como te ajudar.",
-    objetivos: ["Quero comprar", "Quero vender", "Quero alugar", "Quero investir"],
+    objetivos: ["Quero comprar", "Quero vender", "Quero investir", "Quero avaliar meu imóvel"],
     tipos: ["Casa", "Apartamento", "Terreno", "Chácara", "Comercial", "Ainda não sei"],
     prazos: ["O quanto antes", "Nos próximos 3 meses", "Neste ano", "Só pesquisando"]
   },
