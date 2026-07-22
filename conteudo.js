@@ -37,7 +37,7 @@ const CONTEUDO = {
     titulo_1: "O imóvel certo",
     titulo_2: "para a sua",
     titulo_3: "próxima fase.",
-    texto: "Compra, venda e avaliação de casas, apartamentos, terrenos e áreas comerciais, com acompanhamento pessoal até a escritura.",
+    texto: "Compra, venda e avaliação de casas, apartamentos, terrenos e áreas comerciais, com acompanhamento pessoal até a escritura e registro.",
     cta: "Falar no WhatsApp",
     cta_secundario: "Ver imóveis disponíveis",
     selos: ["Corretor com CRECI ativo", "Avaliação imobiliária", "Atendimento pessoal"]
@@ -58,7 +58,7 @@ const CONTEUDO = {
   /* ---------- 2c. SERVIÇOS ---------- */
   servicos: [
     { titulo: "Comprar", texto: "Seleção filtrada pelo seu orçamento e pela sua rotina, com visita acompanhada e documentação conferida antes da proposta." },
-    { titulo: "Vender", texto: "Preço definido por comparação real de mercado, anúncio profissional e triagem de interessados até a escritura." },
+    { titulo: "Vender", texto: "Preço definido por comparação real de mercado, anúncio profissional e triagem de interessados até a escritura e registro." },
     { titulo: "Avaliar", texto: "Parecer técnico de valor para venda, inventário, partilha, garantia bancária ou decisão de investimento." }
   ],
 
