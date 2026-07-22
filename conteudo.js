@@ -12,7 +12,7 @@ const CONTEUDO = {
     primeiro_nome: "Cesar",          // usado nas mensagens de WhatsApp
     sobrenome: "Corretor de Imóveis",
     cargo: "Corretor e Avaliador Imobiliário",
-    creci: "CRECI/MT 1043",
+    creci: "CRECI F-7828",
     cidade: "Lucas do Rio Verde",
     estado: "MT",
     atuacao: "Lucas do Rio Verde e região",
@@ -79,13 +79,12 @@ const CONTEUDO = {
     ],
     foto: FOTO_CORRETOR.retrato,     // imagem embutida em foto-corretor.js
     avatar: FOTO_CORRETOR.avatar,
-    assinatura: "Cesar Aragão · CRECI/MT 1043",
+    assinatura: "Cesar Aragão · CRECI F-7828",
 
     /* Cargos e registros — aparecem em destaque na seção do corretor */
     credenciais: [
-      { rotulo: "Registro profissional", valor: "CRECI/MT 1043" },
-      { rotulo: "Conselheiro Fiscal",    valor: "Gestão 2025–2027" },
-      { rotulo: "Delegado Municipal",    valor: "CRECI-MT · F-7828" },
+      { rotulo: "Registro profissional", valor: "CRECI F-7828" },
+      { rotulo: "Delegado Municipal",    valor: "Gestão 2025–2027" },
       { rotulo: "Área de atuação",       valor: "Lucas do Rio Verde-MT e região" }
     ]
   },
