@@ -77,17 +77,25 @@ const CONTEUDO = {
       "Acompanho de perto a variação de preço por bairro, o ritmo dos lançamentos e a liquidez de cada região da cidade. É esse acervo de informação que evita que você pague caro na compra ou anuncie errado na venda.",
       "Cada negociação é conduzida por mim do primeiro contato à assinatura: visita, documentação, proposta, financiamento e escritura."
     ],
-    foto: "fotos/aragao.jpg",        // foto real do corretor
-    avatar: "fotos/aragao-avatar.jpg",
-    assinatura: "Cesar Aragão · CRECI/MT 1043"
+    foto: FOTO_CORRETOR.retrato,     // imagem embutida em foto-corretor.js
+    avatar: FOTO_CORRETOR.avatar,
+    assinatura: "Cesar Aragão · CRECI/MT 1043",
+
+    /* Cargos e registros — aparecem em destaque na seção do corretor */
+    credenciais: [
+      { rotulo: "Registro profissional", valor: "CRECI/MT 1043" },
+      { rotulo: "Conselheiro Fiscal",    valor: "Gestão 2025–2027" },
+      { rotulo: "Delegado Municipal",    valor: "CRECI-MT · F-7828" },
+      { rotulo: "Área de atuação",       valor: "Lucas do Rio Verde-MT e região" }
+    ]
   },
 
   /* ---------- 5. NÚMEROS ---------- */
   numeros: [
-    { valor: "10", sufixo: "anos", rotulo: "atuando no mercado imobiliário da região" },
+    { valor: "10", sufixo: "anos", rotulo: "atuando no mercado imobiliário" },
     { valor: "300", sufixo: "+",   rotulo: "imóveis negociados na região" },
-    { valor: "150", sufixo: "+",   rotulo: "avaliações e pareceres de valor emitidos" },
-    { valor: "100", sufixo: "%",   rotulo: "das negociações acompanhadas pessoalmente" }
+    { valor: "150", sufixo: "+",   rotulo: "avaliações e pareceres emitidos" },
+    { valor: "100", sufixo: "%",   rotulo: "das negociações acompanhadas por ele" }
   ],
 
   /* ---------- 6. COMO FUNCIONA (etapas reais, em ordem) ---------- */
