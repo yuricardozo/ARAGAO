@@ -477,20 +477,81 @@ main{max-width:1420px;margin:0 auto;padding:28px 26px 90px}
   drop.ondrop = e => { e.preventDefault(); drop.classList.remove('ativo'); enviar([...e.dataTransfer.files]); };
   input.onchange = () => { enviar([...input.files]); input.value = ''; };
 
+  /* ---- marca d'água: círculo com traçado e as iniciais CA ----
+     é gravada na própria imagem no momento do upload, então acompanha
+     a foto por todo o site e em qualquer lugar que ela seja aberta. */
+  const INICIAIS = (CONTEUDO.marca.nome || 'CA').trim().split(/\s+/).map(p => p[0]).slice(0,2).join('').toUpperCase();
+
+  function carregarImagem(arquivo){
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = URL.createObjectURL(arquivo);
+    });
+  }
+
+  async function marcarDagua(arquivo){
+    let img;
+    try{ img = await carregarImagem(arquivo); }
+    catch(e){ return arquivo; }   // se não conseguir ler, sobe a original
+
+    /* limita o lado maior a 1600px — deixa a foto leve sem perder nitidez */
+    const max = 1600;
+    const escala = Math.min(1, max / Math.max(img.width, img.height));
+    const L = Math.round(img.width * escala), A = Math.round(img.height * escala);
+
+    const cv = document.createElement('canvas');
+    cv.width = L; cv.height = A;
+    const ctx = cv.getContext('2d');
+    ctx.drawImage(img, 0, 0, L, A);
+
+    /* selo no canto inferior direito, proporcional ao tamanho da foto */
+    const r = Math.round(Math.min(L, A) * 0.085);
+    const margem = Math.round(r * 0.7);
+    const cx = L - margem - r, cy = A - margem - r;
+
+    ctx.save();
+    /* leve sombra para o selo funcionar sobre foto clara ou escura */
+    ctx.shadowColor = 'rgba(0,0,0,.35)';
+    ctx.shadowBlur = r * 0.25;
+    ctx.strokeStyle = 'rgba(255,255,255,.92)';
+    ctx.lineWidth = Math.max(2, r * 0.05);
+
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+    /* anel interno fino, para dar acabamento ao traçado */
+    ctx.lineWidth = Math.max(1, r * 0.02);
+    ctx.beginPath(); ctx.arc(cx, cy, r * 0.82, 0, Math.PI * 2); ctx.stroke();
+
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(255,255,255,.95)';
+    ctx.font = `600 ${Math.round(r * 0.72)}px 'Fraunces', Georgia, serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(INICIAIS, cx, cy + r * 0.04);
+    ctx.restore();
+
+    const blob = await new Promise(res => cv.toBlob(res, 'image/jpeg', 0.9));
+    return blob || arquivo;
+  }
+
   async function enviar(arquivos){
     const imgs = arquivos.filter(f => f.type.startsWith('image/'));
     if(!imgs.length) return;
     $('#carga').classList.add('on');
+    /* espera a fonte da marca d'água estar pronta (só na 1ª vez) */
+    try{ await document.fonts.load(`600 40px 'Fraunces'`); }catch(e){}
     for(const arq of imgs){
-      const nome = `${Date.now()}-${Math.random().toString(36).slice(2,8)}-${arq.name.replace(/[^\w.\-]/g,'_')}`;
-      const { error } = await db.storage.from(SUPA.bucket).upload(nome, arq, { cacheControl:'31536000', upsert:false });
+      const marcada = await marcarDagua(arq);
+      const nome = `${Date.now()}-${Math.random().toString(36).slice(2,8)}.jpg`;
+      const { error } = await db.storage.from(SUPA.bucket).upload(nome, marcada, { cacheControl:'31536000', upsert:false, contentType:'image/jpeg' });
       if(error){ toast('Erro no envio: ' + error.message); continue; }
       const { data } = db.storage.from(SUPA.bucket).getPublicUrl(nome);
       fotos.push(data.publicUrl);
       desenharFotos();
     }
     $('#carga').classList.remove('on');
-    toast('Fotos enviadas.');
+    toast("Fotos enviadas com a marca d'água.");
   }
 
   /* salvar */
